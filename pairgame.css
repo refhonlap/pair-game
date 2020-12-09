@@ -3,20 +3,38 @@
     grid-template-columns: auto auto auto auto auto;
     justify-content: center;
     text-align: center;
-    place-items: center;
-    height: 132px;
+    /* place-items: center; */
+    max-height: 132px;
 }
 
 .card {
     width: 100px;
-    font-size: 3rem;
     padding: 0;
     background-color: transparent;
     border: none;
+    transition: transform .3s;
+    transform-style: preserve-3d;
+    font-size: 3rem;
+}
+
+.front, .back {
+    backface-visibility: hidden;
+}
+
+.back {
+    transform: rotateY(0deg);
 }
 
 .front {
-    display: none;
+    transform: rotateY(180deg);
+}
+
+.card.flipped {
+    transform: rotateY(180deg);
+}
+
+.card.found {
+    transform: rotateY(180deg);
 }
 
 .back img {

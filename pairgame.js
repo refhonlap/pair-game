@@ -7,6 +7,8 @@
         'fa-paw',
     ];
 
+    let points = 0;
+
     const getOneCard = (icon) => {
         const div = document.createElement('div');
         div.classList.add('card');
@@ -55,13 +57,49 @@
 
     }
 
+    let blockClick = false;
     const cardClick = (ev) => {
+        if (blockClick) {
+            return;
+        }
+
         ev.currentTarget.classList.toggle('flipped');
+        const flippedCards = document.querySelectorAll('.card.flipped');
+        if (flippedCards.length > 1) {
+            blockClick = true;
+            const to = setTimeout( () => {
+                clearTimeout(to);
+                blockClick = false;
+                document.querySelectorAll('.card').forEach( card => {
+                    card.classList.remove('flipped');
+                });
+            }, 2000);
+
+            checkPair();
+        }
     };
 
     const cards = document.querySelectorAll('.card');
     cards.forEach( card => {
         card.addEventListener('click', cardClick);
-    })
+    });
 
+    const showPoints = (points) => {
+        document.querySelector('.user-points').textContent = points;
+    }
+
+    const checkPair = () => {
+        const firstCardIcon = document.querySelector('.card.flipped i');
+        if (firstCardIcon) {
+            const firstIconClass = firstCardIcon.className.split(' ');
+            const pair = document.querySelectorAll(`.card.flipped .${firstIconClass.pop()}`);
+            if (pair.length == 2) {
+                points++;
+                showPoints(points);
+                document.querySelectorAll(`.card.flipped`).forEach(
+                    card => card.classList.add('found')
+                );
+            }
+        }
+    }
 })();
